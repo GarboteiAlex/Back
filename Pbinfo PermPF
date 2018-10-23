@@ -1,0 +1,39 @@
+#include <fstream>
+
+using namespace std;
+
+ifstream fin("permpf.in");
+ofstream fout("permpf.out");
+
+int n;
+int pf[10], used[10], sol[10];
+
+void bkt(int pas) {
+    if(pas == n + 1) {
+        for(int i = 1; i <= n; i++) {
+            fout << sol[i]<< " ";
+        }
+        fout << '\n';
+        
+        return;
+    } else {
+        for(int i = 1; i <= n; i++) {
+            if(!used[i] && pf[pas] != i) {
+                used[i] = 1;
+                sol[pas] = i;
+                bkt(pas + 1);
+                used[i] = 0;
+            }
+        }
+    }
+}
+
+int main() {
+    fin >> n;
+    
+    for(int i = 1; i <= n; i++) {
+        pf[i] = i;
+    }
+    
+    bkt(1);
+}
