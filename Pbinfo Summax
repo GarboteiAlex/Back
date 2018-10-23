@@ -1,0 +1,43 @@
+#include <fstream>
+
+using namespace std;
+
+ifstream fin("summax.in");
+ofstream fout("summax.out");
+
+int n;
+int sum,summax;
+int mat[11][11];
+int usedj[11];
+int sol[11];
+
+void bkt(int pasi) {
+    if(pasi == n + 1) {
+        summax = max(summax, sum);
+        
+        return;
+    } else {
+        for(int j = 1; j <= n; j++) {
+            if(!usedj[j]) {
+                usedj[j] = 1;
+                sum += mat[pasi][j];
+                bkt(pasi + 1);
+                usedj[j] = 0;
+                sum -= mat[pasi][j];
+            }
+        }
+    }
+}
+
+int main() {
+    fin >> n;
+    for(int i = 1; i <= n; i++) {
+        for(int j = 1; j <= n; j++) {
+            fin >> mat[i][j];
+        }
+    }
+    
+    bkt(1);
+    
+    fout << summax;
+}
