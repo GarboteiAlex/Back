@@ -1,0 +1,63 @@
+#include <fstream>
+
+using namespace std;
+
+ifstream fin("bila.in");
+ofstream fout("bila.out");
+
+int n,m;
+int mat[22][22];
+int used[22][22];
+int di[] = {-1, 0, 1, 0};
+int dj[] = {0, 1, 0, -1};
+int path;
+int longestpath;
+int istart, jstart;
+
+bool inside(int i, int j) {
+    if(i && i <= n && j && j <= m) {
+        return true;
+    }
+    return false;
+}
+
+void bkt(int pasi, int pasj) {
+    if(pasi == n || pasj == m || pasi == 1 || pasj == 1) {
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= m; j++) {
+                if(used[i][j]) {
+                    path++;
+                }
+            }
+        }
+        longestpath = max(longestpath, path);
+        path = 0;
+        
+        return;
+    } else {
+        for(int i = 0; i < 4; i++) {
+            int newi = pasi + di[i];
+            int newj = pasj + dj[i];
+            if(!used[newi][newj] && mat[pasi][pasj] > mat[newi][newj] && inside(newi, newj)) {
+                used[newi][newj] = 1;
+                bkt(newi, newj);
+                used[newi][newj] = 0;
+            }
+        }
+    }
+}
+
+int main() {
+    fin >> n >> m;
+    for(int i = 1; i <= n; i++) {
+        for(int j = 1; j <= m; j++) {
+            fin >> mat[i][j];
+        }
+    }
+    fin >> istart >> jstart;
+    
+    used[istart][jstart] = 1;
+    bkt(istart, jstart);
+    
+    fout << longestpath;
+}

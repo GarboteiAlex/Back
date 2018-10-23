@@ -1,0 +1,37 @@
+#include <fstream>
+
+using namespace std;
+
+ifstream fin("combinari.in");
+ofstream fout("combinari.out");
+
+int n, k;
+int used[20], sol[20];
+
+void bkt(int pas) {
+    if(pas == k + 1) {
+        if(sol[1] != 0) {
+            for(int i = 1; i <= k; i++) {
+                fout << sol[i] << " ";
+            }
+            fout << '\n';
+        }
+        
+        return;
+    } else {
+        for(int i = sol[pas - 1]; i <= n; i++) {
+            if(!used[i]) {
+                used[i] = 1;
+                sol[pas] = i;
+                bkt(pas + 1);
+                used[i] = 0;
+            }
+        }
+    }
+}
+
+int main() {
+    fin >> n >> k;
+    
+    bkt(1);
+}
